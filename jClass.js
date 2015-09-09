@@ -42,7 +42,6 @@
         if (!target[P_SUPER]) {
             target[P_SUPER] = callSuper;
         }
-        mixins = mixins instanceof Array ? mixins : [mixins];
         var identifier = target.hasOwnProperty(P_IDENTIFIER) ? target[P_IDENTIFIER] : V_INDENTIFIER_ANY;
         for (var i = 0; i < mixins.length; i++) {
             var src = mixins[i];

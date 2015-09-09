@@ -82,13 +82,44 @@ describe('Test Class Declaration and Inheritance', function() {
     it('Class with Mixin of breaking super call', function () {
         // Test Case: Declare class with two mixins, the first has super-call 'fn', the second has no-super-call 'fn'
         // Test Target: No-super-call func inherit should break further super call
+        lib.resetOut();
         var Cls = jClass.declare(null, [lib.mx_super, lib.mx_fn], lib.p_super('cls')),
             inst = new Cls();
-        lib.resetOut();
         inst.fn();
         test.array(lib.getOut()).is([
             'mx_fn:fn',
             'cls:fn'
         ]);
     });
+
+    //it('Inherit with same func applied to two props on same class', function () {
+    //    // Test Case: Sub class has two props assigned with the same super-call func
+    //    // Test Target: Binding super-fn won't be conflict on different props
+    //    var out = [],
+    //        Base = jClass.declare(null, null, {
+    //            bcid: 'base',
+    //            fn_1: function () {
+    //                out.push(this.bcid + ':fn_1');
+    //            },
+    //            fn_2: function () {
+    //                out.push(this.bcid + ':fn_2');
+    //            }
+    //        }),
+    //        subfunc = function () {
+    //            this.Super();
+    //            out.push(this.scid + ':fn');
+    //        },
+    //        Sub = jClass.declare(Base, null, {
+    //            scid: 'sub',
+    //            fn_1: subfunc,
+    //            fn_2: subfunc
+    //        }),
+    //        subInst = new Sub();
+    //    subInst.fn_1();
+    //    test.array(out).is(['base:fn_1', 'sub:fn']);
+    //
+    //    out = []
+    //    subInst.fn_2();
+    //    test.array(out).is(['base:fn_2', 'sub:fn']);
+    //});
 });
