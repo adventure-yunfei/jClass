@@ -5,7 +5,6 @@
     var P_SUPER = 'Super',
         P_CONSTRUCTOR = 'constr',
         P_SUPER_FNS_MAP = '_superFns',
-        P_SUPER_FN = '_superFn',
         P_IS_WRAPPER_FOR_ANY = '_isWrapperForAny',
         P_SUPER_ID_SEARCH_CHAIN = '_idChain',
         P_IDENTIFIER = '_id',
@@ -54,7 +53,7 @@
                         val = wrapForIdentifierAny(val);
                     }
                     var superFnsMap = val[P_SUPER_FNS_MAP] = val[P_SUPER_FNS_MAP] || {};
-                    superFnsMap[P_SUPER_FN] = target[key];
+                    superFnsMap[identifier] = target[key];
                 }
                 target[key] = val;
             }
@@ -71,7 +70,7 @@
             proto[P_SUPER_ID_SEARCH_CHAIN] = [V_INDENTIFIER_ANY, id].concat(superProto ? superProto[P_SUPER_ID_SEARCH_CHAIN].slice(1) : []);
             mixin(proto, (mixins || []).concat(classProps ? [classProps] : []));
             function Constructor() {
-                this[P_CONSTRUCTOR].apply(this, arguments);
+                this[P_CONSTRUCTOR] && this[P_CONSTRUCTOR].apply(this, arguments);
             }
             Constructor.prototype = proto;
             proto.constructor = Constructor;
@@ -79,5 +78,8 @@
         },
         mixin: mixin
     };
-    window.jClass = jClass;
-});
+    if (typeof window !== 'undefined') window.jClass = jClass;
+    if (typeof module !== 'undefined') {
+        module.exports = jClass;
+    }
+}());

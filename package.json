@@ -1,0 +1,12 @@
+{
+  "name": "jClass",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "lodash": "^3.10.1",
+    "unit.js": "^2.0.0"
+  }
+}
