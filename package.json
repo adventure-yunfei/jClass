@@ -1,12 +1,16 @@
 {
   "name": "jClass",
-  "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "A simple but powerful javascript Class system implementation (combined with single-inheritance and multi-mixins",
+  "keywords": [
+    "javascript", "class", "jClass", "super", "inherite"
+  ],
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/mocha/bin/mocha test"
   },
   "devDependencies": {
     "lodash": "^3.10.1",
+    "mocha": "^2.3.2",
     "unit.js": "^2.0.0"
   }
 }
