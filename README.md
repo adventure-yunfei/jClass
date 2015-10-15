@@ -42,6 +42,7 @@ var mx = { func: function (argv) {
 ```javascript
 var SubClass = jClass.declare(BaseClass, [ mx ], {
         constr: function () {
+            this.Super(/**may change any arguments here*/);
             console.log('Sub constructor');
         },
         func: function () {
