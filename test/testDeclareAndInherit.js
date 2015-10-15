@@ -122,4 +122,23 @@ describe('Test Class Declaration and Inheritance', function() {
     //    subInst.fn_2();
     //    test.array(out).is(['base:fn_2', 'sub:fn']);
     //});
+
+    // it('Inherit with same func applied to the same prop on both base as sub class', function () {
+    //     // Test Case: Sub class has a prop having the same super-call func with Base class
+    //     // Test Target: Binding super-fn won't be conflict on different level of class chain
+    //     var output = [],
+    //         fn = function () {
+    //             this.Super();
+    //             output.push('fn_called');
+    //         },
+    //         Base = jClass.declare(null, null, {
+    //             fn: fn
+    //         }),
+    //         Sub = jClass.declare(Base, null, {
+    //             fn: fn
+    //         }),
+    //         subInst = new Sub();
+    //     subInst.fn();
+    //     test.array(output).is(['fn_called', 'fn_called']);
+    // });
 });
