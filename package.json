@@ -1,9 +1,9 @@
 {
-  "name": "jClass",
+  "name": "javascript-class",
   "version": "1.0.0",
   "description": "A simple but powerful javascript Class system implementation (combined with single-inheritance and multi-mixins",
   "keywords": [
-    "javascript", "class", "jClass", "super", "inherite"
+    "javascript", "class", "jClass", "javascript-class", "super", "inherite"
   ],
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha test"
