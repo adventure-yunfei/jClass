@@ -3,7 +3,7 @@
  */
 (function () {
     var P_SUPER = 'Super',
-        P_CONSTRUCTOR = 'constr',
+        P_CONSTRUCTOR = 'constructor',
         P_SUPER_FNS_MAP = '_superFns',
         P_IS_WRAPPER_FOR_ANY = '_isWrapperForAny',
         P_SUPER_ID_SEARCH_CHAIN = '_idChain',
@@ -72,7 +72,7 @@
                 this[P_CONSTRUCTOR] && this[P_CONSTRUCTOR].apply(this, arguments);
             }
             Constructor.prototype = proto;
-            proto.constructor = Constructor;
+            proto._Class = Constructor;
             return Constructor;
         },
         mixin: mixin

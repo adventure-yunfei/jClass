@@ -5,7 +5,7 @@ var _ = require('lodash'),
     output = [],
     p_constr = function (id) {
         return {
-            constr: function () {
+            constructor: function () {
                 this.Super();
                 output.push(id + ':constr');
             }
