@@ -80,5 +80,7 @@
     if (typeof window !== 'undefined') window.jClass = jClass;
     if (typeof module !== 'undefined') {
         module.exports = jClass;
+    } else if (typeof define === 'function') {
+        define(jClass);
     }
 }());
