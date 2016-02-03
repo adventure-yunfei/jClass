@@ -5,8 +5,8 @@ var _ = require('lodash'),
     output = [],
     p_constr = function (id) {
         return {
-            constructor: function () {
-                this.Super();
+            $constructor: function () {
+                this.$super();
                 output.push(id + ':constr');
             }
         };
@@ -14,7 +14,7 @@ var _ = require('lodash'),
     p_super = function (id) {
         return {
             fn: function () {
-                this.Super();
+                this.$super();
                 output.push(id + ':fn');
             }
         };

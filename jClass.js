@@ -2,8 +2,8 @@
  * Created by yunfei on 9/8/15.
  */
 (function () {
-    var P_SUPER = 'Super',
-        P_CONSTRUCTOR = 'constructor',
+    var P_SUPER = '$super',
+        P_CONSTRUCTOR = '$constructor',
         P_SUPER_FNS_MAP = '_superFns',
         P_IS_WRAPPER_FOR_ANY = '_isWrapperForAny',
         P_SUPER_ID_SEARCH_CHAIN = '_idChain',

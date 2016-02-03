@@ -15,14 +15,14 @@ jClass.mixin(target/**<object>*/, mixins/**<Array>*/);
 ```
 Keywords:
 
-* `this.Super` Call super function inside overridden func
-* `constructor` Prop key which define constructor function (which is called on creating new class instance)
+* `this.$super` Call super function inside overridden func
+* `$constructor` Prop key which define constructor function (which is called on creating new class instance)
 
 # Usage
 #### Declare a Base class
 ```javascript
 var BaseClass = jClass.declare(null, null, {
-        constructor: function () {
+        $constructor: function () {
             console.log('Base constructor');
         },
         propA: 'valueA',
@@ -34,19 +34,19 @@ var BaseClass = jClass.declare(null, null, {
 #### Define mixin (which is just a plain object) and call super func 
 ```javascript
 var mx = { func: function (argv) {
-        this.Super();
+        this.$super();
         console.log('mx func with arg value as "' + argv + '"');
     }}
 ```
 #### Inherit existed class and mixin
 ```javascript
 var SubClass = jClass.declare(BaseClass, [ mx ], {
-        constructor: function () {
-            this.Super(/**may change any arguments here*/);
+        $constructor: function () {
+            this.$super(/**may change any arguments here*/);
             console.log('Sub constructor');
         },
         func: function () {
-            this.Super('hello');
+            this.$super('hello');
             console.log('Sub func');
         }
     };
