@@ -2,65 +2,57 @@
  * Created by yunfei on 9/8/15.
  */
 (function () {
-    var PSuper = '$super',
-        PConstructor = '$constructor',
-        SuperFnsMap = '_superFns',
-        IsWrapperForAny = '_isWrapperForAny',
-        InheritedForAny = '_inheritedForAny',
-        SuperIdSearchChain = '_idChain',
-        Identifier = '_id';
+    var P_SUPER = '$super',
+        P_CONSTRUCTOR = '$constructor',
+        P_SUPER_FNS_MAP = '_superFns',
+        P_IS_WRAPPER_FOR_ANY = '_isWrapperForAny',
+        P_SUPER_ID_SEARCH_CHAIN = '_idChain',
+        P_IDENTIFIER = '_id',
+        V_INDENTIFIER_ANY = '*';
 
     var idCount = 0;
     function getUniqueIdentifier() {
         return 'jClass_id_' + (idCount++);
     }
 
-    function wrapFunc(inherited, override) {
+    function wrapForIdentifierAny(fn) {
         var wrapperFn = function () {
-            var oldInherited = this._inherited;
-            this[InheritedForAny] = inherited;
-            var result = override.apply(this, arguments);
-            this[InheritedForAny] = oldInherited;
-            return result;
+            fn.apply(this, arguments);
         };
-        wrapperFn[IsWrapperForAny] = true;
+        wrapperFn[P_IS_WRAPPER_FOR_ANY] = true;
         return wrapperFn;
     }
 
     function callSuper() {
-        var fnCallingSuper = callSuper.caller;
-        if (fnCallingSuper.caller && fnCallingSuper.caller[IsWrapperForAny]) {
-            return this[InheritedForAny] && this[InheritedForAny].apply(this, arguments);
-        } else {
-            var superFnsMap = fnCallingSuper[SuperFnsMap];
-            if (superFnsMap) {
-                var idChain = this[SuperIdSearchChain];
-                for (var i = 0; i < idChain.length; i++) {
-                    var superFn = superFnsMap[idChain[i]];
-                    if (superFn) {
-                        return superFn.apply(this, arguments);
-                    }
+        var fnCallingSuper = callSuper.caller,
+            srcFn = fnCallingSuper.caller && fnCallingSuper.caller[P_IS_WRAPPER_FOR_ANY] ? fnCallingSuper.caller : fnCallingSuper,
+            superFnsMap = srcFn[P_SUPER_FNS_MAP];
+        if (superFnsMap) {
+            var idChain = this[P_SUPER_ID_SEARCH_CHAIN] || [V_INDENTIFIER_ANY]/**For no-class object*/;
+            for (var i = 0; i < idChain.length; i++) {
+                var superFn = superFnsMap[idChain[i]];
+                if (superFn) {
+                    return superFn.apply(this, arguments);
                 }
             }
         }
     }
 
     function mixin(target, mixins) {
-        if (!target[PSuper]) {
-            target[PSuper] = callSuper;
+        if (!target[P_SUPER]) {
+            target[P_SUPER] = callSuper;
         }
-        var identifier = target.hasOwnProperty(Identifier) ? target[Identifier] : null;
+        var identifier = target.hasOwnProperty(P_IDENTIFIER) ? target[P_IDENTIFIER] : V_INDENTIFIER_ANY;
         for (var i = 0; i < mixins.length; i++) {
             var src = mixins[i];
             for (var key in src) {
                 var val = src[key];
                 if (val instanceof Function && target[key] instanceof Function) {
-                    if (identifier) {
-                        var superFnsMap = val[SuperFnsMap] = val[SuperFnsMap] || {};
-                        superFnsMap[identifier] = target[key];
-                    } else {
-                        val = wrapFunc(target[key], val);
+                    if (identifier === V_INDENTIFIER_ANY) {
+                        val = wrapForIdentifierAny(val);
                     }
+                    var superFnsMap = val[P_SUPER_FNS_MAP] = val[P_SUPER_FNS_MAP] || {};
+                    superFnsMap[identifier] = target[key];
                 }
                 target[key] = val;
             }
@@ -73,11 +65,11 @@
             var id = getUniqueIdentifier(),
                 superProto = SuperClass && SuperClass.prototype,
                 proto = superProto ? Object.create(superProto) : {};
-            proto[Identifier] = id;
-            proto[SuperIdSearchChain] = [id].concat(superProto && superProto[SuperIdSearchChain] || []);
+            proto[P_IDENTIFIER] = id;
+            proto[P_SUPER_ID_SEARCH_CHAIN] = [V_INDENTIFIER_ANY, id].concat(superProto ? superProto[P_SUPER_ID_SEARCH_CHAIN].slice(1) : []);
             mixin(proto, (mixins || []).concat(classProps ? [classProps] : []));
             function Constructor() {
-                this[PConstructor] && this[PConstructor].apply(this, arguments);
+                this[P_CONSTRUCTOR] && this[P_CONSTRUCTOR].apply(this, arguments);
             }
             Constructor.prototype = proto;
             proto._Class = Constructor;
@@ -85,7 +77,6 @@
         },
         mixin: mixin
     };
-
     if (typeof window !== 'undefined') window.jClass = jClass;
     if (typeof module !== 'undefined') {
         module.exports = jClass;
