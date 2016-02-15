@@ -23,19 +23,23 @@
         return wrapperFn;
     }
 
-    function callSuper() {
-        var fnCallingSuper = callSuper.caller,
-            srcFn = fnCallingSuper.caller && fnCallingSuper.caller[P_IS_WRAPPER_FOR_ANY] ? fnCallingSuper.caller : fnCallingSuper,
-            superFnsMap = srcFn[P_SUPER_FNS_MAP];
+    function findSuper(fn, idSearchChain) {
+        var superFnsMap = fn[P_SUPER_FNS_MAP];
         if (superFnsMap) {
-            var idChain = this[P_SUPER_ID_SEARCH_CHAIN] || [V_INDENTIFIER_ANY]/**For no-class object*/;
-            for (var i = 0; i < idChain.length; i++) {
-                var superFn = superFnsMap[idChain[i]];
+            for (var i = 0; i < idSearchChain.length; i++) {
+                var superFn = superFnsMap[idSearchChain[i]];
                 if (superFn) {
-                    return superFn.apply(this, arguments);
+                    return superFn;
                 }
             }
         }
+    }
+
+    function callSuper() {
+        var fnCallingSuper = callSuper.caller,
+            srcFn = fnCallingSuper.caller && fnCallingSuper.caller[P_IS_WRAPPER_FOR_ANY] ? fnCallingSuper.caller : fnCallingSuper,
+            superFn = findSuper(srcFn, this[P_SUPER_ID_SEARCH_CHAIN] || [V_INDENTIFIER_ANY]/**For no-class object*/);
+        return superFn && superFn.apply(this, arguments);
     }
 
     function mixin(target, mixins) {
@@ -48,7 +52,7 @@
             for (var key in src) {
                 var val = src[key];
                 if (val instanceof Function && target[key] instanceof Function) {
-                    if (identifier === V_INDENTIFIER_ANY) {
+                    if (identifier === V_INDENTIFIER_ANY || findSuper(val, target[P_SUPER_ID_SEARCH_CHAIN] || [V_INDENTIFIER_ANY])) {
                         val = wrapForIdentifierAny(val);
                     }
                     var superFnsMap = val[P_SUPER_FNS_MAP] = val[P_SUPER_FNS_MAP] || {};

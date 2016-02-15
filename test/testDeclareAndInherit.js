@@ -92,36 +92,36 @@ describe('Test Class Declaration and Inheritance', function() {
         ]);
     });
 
-    //it('Inherit with same func applied to two props on same class', function () {
-    //    // Test Case: Sub class has two props assigned with the same super-call func
-    //    // Test Target: Binding super-fn won't be conflict on different props
-    //    var out = [],
-    //        Base = jClass.declare(null, null, {
-    //            bcid: 'base',
-    //            fn_1: function () {
-    //                out.push(this.bcid + ':fn_1');
-    //            },
-    //            fn_2: function () {
-    //                out.push(this.bcid + ':fn_2');
-    //            }
-    //        }),
-    //        subfunc = function () {
-    //            this.Super();
-    //            out.push(this.scid + ':fn');
-    //        },
-    //        Sub = jClass.declare(Base, null, {
-    //            scid: 'sub',
-    //            fn_1: subfunc,
-    //            fn_2: subfunc
-    //        }),
-    //        subInst = new Sub();
-    //    subInst.fn_1();
-    //    test.array(out).is(['base:fn_1', 'sub:fn']);
-    //
-    //    out = []
-    //    subInst.fn_2();
-    //    test.array(out).is(['base:fn_2', 'sub:fn']);
-    //});
+    it('Inherit with same func applied to two props on same class', function () {
+        // Test Case: Sub class has two props assigned with the same super-call func
+        // Test Target: Binding super-fn won't be conflict on different props
+        var out = [],
+            Base = jClass.declare(null, null, {
+                bcid: 'base',
+                fn_1: function () {
+                    out.push(this.bcid + ':fn_1');
+                },
+                fn_2: function () {
+                    out.push(this.bcid + ':fn_2');
+                }
+            }),
+            subfunc = function () {
+                this.$super();
+                out.push(this.scid + ':fn');
+            },
+            Sub = jClass.declare(Base, null, {
+                scid: 'sub',
+                fn_1: subfunc,
+                fn_2: subfunc
+            }),
+            subInst = new Sub();
+        subInst.fn_1();
+        test.array(out).is(['base:fn_1', 'sub:fn']);
+
+        out = [];
+        subInst.fn_2();
+        test.array(out).is(['base:fn_2', 'sub:fn']);
+    });
 
     // it('Inherit with same func applied to the same prop on both base as sub class', function () {
     //     // Test Case: Sub class has a prop having the same super-call func with Base class
